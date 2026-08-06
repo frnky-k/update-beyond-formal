@@ -1,14 +1,15 @@
 from fastapi import APIRouter, Depends, HTTPException
+from typing import List
 from app.models import Order, OrderItem, ProductVariant, User
-from sqlalchemy.orm import Session
+from sqlalchemy.orm import Session, joinedload
 from app.database.connection import get_db
-from app.schema.order import OrderItemCreate, OrderCreate
+from app.schema.order import OrderItemCreate, OrderCreate, OrderResponse
 from app.routes.user import get_current_user
 
 router = APIRouter()
 
 @router.post("/orders")
-def get_orders(order_data: OrderCreate, current_user = Depends(get_current_user), db:Session = Depends(get_db)):
+def create_orders(order_data: OrderCreate, current_user = Depends(get_current_user), db:Session = Depends(get_db)):
   new_order = Order(
     user_id = current_user.id,
     address_id = order_data.address_id,
@@ -40,3 +41,8 @@ def get_orders(order_data: OrderCreate, current_user = Depends(get_current_user)
   db.commit()
   db.refresh(new_order)
   return new_order
+
+@router.get("/orders", response_model=List[OrderResponse])
+def get_orders( current_user= Depends(get_current_user), db:Session = Depends(get_db)):
+  orders = db.query(Order).options(joinedload(Order.items).joinedload(OrderItem.product)).filter(Order.user_id == current_user.id).all()
+  return orders

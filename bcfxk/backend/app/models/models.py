@@ -56,6 +56,7 @@ class Product(Base):
     __tablename__ = "products"
 
     id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
+    image_url = Column(String, nullable=True)
     name = Column(String(200), nullable=False)
     slug = Column(String(200), unique=True, nullable=False)
     description = Column(Text)
@@ -125,6 +126,7 @@ class OrderItem(Base):
     id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
     order_id = Column(UUID(as_uuid=True), ForeignKey("orders.id", ondelete="CASCADE"), nullable=False)
     product_id = Column(UUID(as_uuid=True), ForeignKey("products.id"), nullable=False)
+    product = relationship("Product")
     variant_id = Column(UUID(as_uuid=True), ForeignKey("product_variants.id"), nullable=False)
     quantity = Column(Integer, nullable=False)
     unit_price = Column(Numeric(10,2), nullable=False)

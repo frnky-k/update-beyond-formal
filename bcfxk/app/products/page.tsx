@@ -1,4 +1,6 @@
 import Link from "next/link";
+import SearchBar from "../components/searchbar";
+import Image from "next/image";
 
 type Product = {
   id: string;
@@ -7,6 +9,7 @@ type Product = {
   description: string;
   category: string;
   price: number;
+  image_url: string | null;
   
 };
 
@@ -27,13 +30,21 @@ async function getProducts(): Promise<Product[]> {
 
 export default async function Home() {
   const products = await getProducts();
+  
 
   return (
     <div className="min-h-screen bg-[var(--bg)] px-6 py-24 font-[family-name:var(--font-body)]">
       <main className="mx-auto max-w-5xl">
+
+
         <h1 className="text-3xl font-semibold text-black dark:text-zinc-50">
           BFCxK Products
-        </h1>
+        </h1>   
+
+
+        <SearchBar />
+
+        
 
         {products.length === 0 ? (
           <p className="mt-8 text-zinc-600 dark:text-zinc-400">
@@ -47,7 +58,10 @@ export default async function Home() {
                 href={`/products/${product.slug}`}
                 className="rounded-lg border border-zinc-200 p-5 dark:border-zinc-800 bg-yellow-600"
               > 
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-20">
+              <div className="relative aspect-[3/4] w-full overflow-hidden rounded-lg bg-[var(--accent)]">
+                <Image src={ product.image_url ? `${process.env.NEXT_PUBLIC_API_URL}/${product.image_url}`: "/no-image.jpg"} fill alt={product.name} className="rounded-lg object-contain" unoptimized />
+              </div>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-20 p-3">
                 <h2 className="text-lg font-medium text-black dark:text-zinc-50">
                   {product.name}
                   <p className="mt-1 text-sm text-zinc-500 dark:text-zinc-400">

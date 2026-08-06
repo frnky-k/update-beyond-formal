@@ -2,6 +2,9 @@ import type { Metadata } from "next";
 import { Cinzel, Arimo, Lora, Parisienne } from "next/font/google";
 import "./globals.css";
 import Link from "next/link";
+import Image from "next/image";
+import { ShoppingBag } from "lucide-react";
+import { UserIcon } from "lucide-react";
 
 const cinzel_deco = Cinzel({
   variable: "--font-display",
@@ -50,7 +53,14 @@ export default function RootLayout({
 
           <nav className="font-[family-name:var(--font-display)] ">
             <ul className="flex flex-row gap-6 items-center">
-              <li className="relative group "><Link href={"/login"}>Sign Up</Link>
+              <li className="relative group "><Link href={"/order"}>
+              {/* <Image
+              src={"/shopping-cart.png"}
+              width={30}
+              height={30}
+              alt="Order"/> */}
+              <ShoppingBag  className="w-[30px] h-[30px]"/>
+              </Link>
               <span className="
               absolute
               left-0
@@ -60,7 +70,14 @@ export default function RootLayout({
               bg-[var(--accent)] 
               scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-left"></span></li>
               
-              <li className="relative group "><Link href={"/"}>Search</Link>
+              <li className="relative group "><Link href={"/user"}>
+              {/* <Image
+              src={"/profile-picture.png"}
+              width={30}
+              height={30}
+              alt="User"/> */}
+              <UserIcon  className="w-[30px] h-[30px]"/>
+              </Link>
               <span className="
               absolute
               left-0

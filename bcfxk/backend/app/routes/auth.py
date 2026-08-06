@@ -72,7 +72,7 @@ def register(user_data: UserCreate,db:Session = Depends(get_db)):
 
 @router.get("/users/me")
 def read_current_user(current_user: User = Depends(get_current_user)):
-  return {"name": current_user.name, "email": current_user.email}
+  return {"name": current_user.name, "email": current_user.email  }
 
 # 3. FIX: Removed the stray "router" text that was breaking syntax here
 @router.post("/auth/login")
@@ -95,7 +95,7 @@ def login(response: Response, form_data: OAuth2PasswordRequestForm = Depends(), 
   res = JSONResponse(content=payload)
   res.set_cookie(
     key="access_token",
-    value=f"Bearer {token}",
+    value=token,
     httponly=True,
     max_age=86400,
     samesite="lax", 

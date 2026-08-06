@@ -6,6 +6,7 @@ from app.utils.secure import decode_access_token
 from fastapi.security import OAuth2, OAuth2PasswordBearer 
 from fastapi.openapi.models import OAuthFlows as OAuthFlowsModel
 from app.models import User
+from app.schema.user import userUpdate
 
 router = APIRouter()
 
@@ -14,14 +15,14 @@ class Oauth2PasswordCookieBearer(OAuth2):
     super().__init__(flows={"password":{"tokenUrl": tokenUrl}})
 
   async def __call__(self, request:Request) -> Optional[str]:
-    token_cookie = request.cookies.get("access_token")
-    if not token_cookie:
+    token = request.cookies.get("access_token")
+    if not token:
       raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Not authenticated")
 
-    if token_cookie.startswith("Bearer "):
-      token = token_cookie.replace("Bearer ", "", 1)
+    if token.startswith("Bearer "):
+      token = token.replace("Bearer ", "", 1)
     else:
-      token = token_cookie
+      token = token
 
     return token
 
@@ -42,3 +43,17 @@ def get_current_user(token= Depends(oauth2_scheme), db:Session = Depends(get_db)
 @router.get("/users/me")
 def read_current_user(current_user: User = Depends(get_current_user)) :
   return {"name" : current_user.name, "email":current_user.email}
+
+
+@router.put("/users/me")
+def update_user(user_data: userUpdate, current_username: User = Depends(get_current_user), db: Session = Depends(get_db)):
+  if not current_username:
+    raise HTTPException(status_code=404, detail="Username not Found")
+
+  updates = user_data.model_dump(exclude_unset=True)
+  for field, values in updates.items():
+    setattr(current_username, field, values)
+
+  db.commit()
+  db.refresh(current_username)
+  return current_username

@@ -33,12 +33,29 @@ class ProductVariantUpdate(BaseModel) :
   stock: Optional[str] = None
   sku: Optional[str] = None
 
+  class Config:
+    from_attributes = True
+
+class ProductVariantResponse(BaseModel):
+  id: UUID
+  size: str
+  color: str
+  price: Decimal
+  stock: int
+  sku: str
+
+  class Config:
+    from_attributes = True
+
+
 class ProductResponse(BaseModel):
+  id: UUID
   name: str
-  slug: str 
+  slug: str
   description: str
   category: str
-  variants: List[ProductVariantCreate]
+  image_url: Optional[str] = None 
+  variants: List[ProductVariantResponse]
 
   class Config:
     from_attributes = True

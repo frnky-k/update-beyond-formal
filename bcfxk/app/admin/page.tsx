@@ -12,6 +12,9 @@ export default function Admin(){
           <Link className="bg-[var(--accent)] w-auto px-auto rounded-md py-15 text-3xl text-center font-[family-name:var(--font-mono)]" href={"/admin/products"} >
             Add product
           </Link>
+          <Link className="bg-[var(--accent)] w-auto px-auto rounded-md py-15 text-3xl text-center font-[family-name:var(--font-mono)]" href={"/admin/product-table"} >
+            Product table
+          </Link>
           <Link className="bg-[var(--accent)] w-auto px-auto rounded-md py-15 text-3xl text-center font-[family-name:var(--font-mono)]" href={"/admin/product-variants"} >
             Add product Variant
           </Link>
