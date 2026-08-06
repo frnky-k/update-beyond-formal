@@ -24,15 +24,6 @@ class OrderCreate(BaseModel) :
 class OrderStatusUpdate(BaseModel) :
   status: str 
 
-class OrderResponse(BaseModel) :
-  id: UUID
-  address_id: UUID
-  total_amount: Decimal
-  created_at: datetime
-  items: List[OrderItemResponse]
-
-  class Config: 
-    form_attributes: True
 
 class OrderItemResponse(BaseModel):
   id: UUID
@@ -43,4 +34,14 @@ class OrderItemResponse(BaseModel):
   unit_price: Decimal
 
   class Config:
-    from_attributes = True
+    from_attributes: True
+
+class OrderResponse(BaseModel) :
+  id: UUID
+  address_id: UUID
+  total_amount: Decimal
+  created_at: datetime
+  items: List[OrderItemResponse]
+
+  class Config: 
+    from_attributes: True
